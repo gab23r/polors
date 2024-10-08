@@ -1,3 +1,10 @@
-from polors.gurobi import GurobiPolars
+from typing import TYPE_CHECKING
 
-__all__ = ["GurobiPolars"]
+if TYPE_CHECKING:
+    from polors.gurobi import GurobiPolars  # noqa: F401
+
+from polugins import register_namespaces
+
+register_namespaces(
+    load_config=True  # Loads from pyproject.toml and polugins.toml
+)

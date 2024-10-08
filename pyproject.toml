@@ -26,10 +26,11 @@ packages = ["src/polors"]
 [tool.uv]
 dev-dependencies = [
     "mypy>=1.11.2",
+    "pytest>=8.3.3",
     "ruff>=0.6.9",
 ]
 [tool.ruff]
 line-length = 100
 
 [tool.polugins.dataframe]
-"gurobi_polars" = "polors.gurobi:GurobiPolars"
+"gp" = "polors.gurobi:GurobiPolars"

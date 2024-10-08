@@ -1,4 +1,5 @@
-"""Module containing logic related to eager DataFrames."""
+# type: ignore
+# """Module containing logic related to eager DataFrames."""
 
 from __future__ import annotations
 
@@ -107,8 +108,6 @@ from polars.interchange.protocol import CompatLevel
 from polars.schema import Schema
 from polars.selectors import _expand_selector_dicts, _expand_selectors
 
-import polors
-
 with contextlib.suppress(ImportError):  # Module not available when building docs
     from polars.polars import PyDataFrame, PySeries
     from polars.polars import dtype_str_repr as _dtype_str_repr
@@ -179,6 +178,8 @@ if TYPE_CHECKING:
     from xlsxwriter import Workbook
     from xlsxwriter.worksheet import Worksheet
 
+    import polors
+
     if sys.version_info >= (3, 10):
         from typing import Concatenate, ParamSpec
     else:
@@ -186,7 +187,6 @@ if TYPE_CHECKING:
 
     T = TypeVar("T")
     P = ParamSpec("P")
-
 
 class DataFrame:
     """
@@ -5400,7 +5400,6 @@ class DataFrame:
         return self._from_pydf(self._df.slice(offset, length))
 
     def head(self, n: int = 5) -> DataFrame: ...
-
     def tail(self, n: int = 5) -> DataFrame:
         """
         Get the last `n` rows.
@@ -11115,9 +11114,7 @@ class DataFrame:
         stats
             Statistics to show
         """
-
     gp: polors.GurobiPolars
-
 
 def _prepare_other_arg(other: Any, length: int | None = None) -> Series:
     # if not a series create singleton series such that it will broadcast

@@ -2,11 +2,6 @@ from typing import Any, Callable
 
 import gurobipy as gp
 import polars as pl
-from polugins import register_namespaces
-
-register_namespaces(
-    load_config=True  # Loads from pyproject.toml and polugins.toml
-)
 
 
 class GurobiPolars:

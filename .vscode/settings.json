@@ -5,4 +5,8 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
     },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.pytestEnabled": true,
 }
