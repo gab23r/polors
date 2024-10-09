@@ -33,4 +33,6 @@ dev-dependencies = [
 line-length = 100
 
 [tool.polugins.dataframe]
+# this is used to have typing with the gp accessor
+# https://github.com/StefanBRas/polugins/tree/create-pull-request/patch
 "gp" = "polors.gurobi:GurobiPolars"
