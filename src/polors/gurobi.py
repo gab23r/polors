@@ -79,7 +79,7 @@ class GurobiPolars:
                         pl.concat_str([c for c in indices], separator=","),
                     )
                 )
-                .to_series()
+                .to_series(0)
                 .to_list()
             )
         else:
@@ -117,3 +117,6 @@ class GurobiPolars:
             return self._df
         else:
             return self._df.with_columns(pl.Series(name, constrs, dtype=pl.Object))
+
+
+# %%
