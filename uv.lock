@@ -126,7 +126,7 @@ wheels = [
 
 [[package]]
 name = "polors"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "polars" },
@@ -153,7 +153,7 @@ requires-dist = [
     { name = "numpy", marker = "extra == 'gurobi'", specifier = ">=2.1.2" },
     { name = "polars", specifier = ">=1.9" },
     { name = "polugins", specifier = ">=0.5.1" },
-    { name = "polugins-type-gen", specifier = ">=0.6.0rc1" },
+    { name = "polugins-type-gen", specifier = ">=0.6.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -179,14 +179,14 @@ wheels = [
 
 [[package]]
 name = "polugins-type-gen"
-version = "0.6.0rc1"
+version = "0.6.0"
 source = { registry = "https://pypi.python.org/simple" }
 dependencies = [
     { name = "polugins" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/70/f0/97883646b4103a88c82d3cde1765cfb4675a6ca02bd3cd5480eee6a1facb/polugins_type_gen-0.6.0rc1.tar.gz", hash = "sha256:82ad5194c703e99991ff562d4188cae6e6aad2e361a941ad44f1fc05c6ff6e04", size = 3427 }
+sdist = { url = "https://files.pythonhosted.org/packages/c6/bb/c42f18d9b7eee47f7556090a2837ea915ce9733d2aab142679bce6336de9/polugins_type_gen-0.6.0.tar.gz", hash = "sha256:b5d6ee875ca30fb3b8227ab8267b19fe08c1e3160ddc823e89076405badf3e15", size = 3982 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/33/1e4438eb7f30ed22a1d15790913d988c42697b45d7e28bad546c0c185288/polugins_type_gen-0.6.0rc1-py3-none-any.whl", hash = "sha256:e0f30766fe0e701492fb246e5cf2de8b49060045b7261ef9333a36bdb9311a07", size = 4958 },
+    { url = "https://files.pythonhosted.org/packages/f7/55/8e5dda056ed8228b0a763a076e1edaed7dc93e9e1d5467f490cd8b5b8cc4/polugins_type_gen-0.6.0-py3-none-any.whl", hash = "sha256:e62d9d5e4ade15809690abb67f2c761d3d425bdd6b357297e07ecb46c9ca8d41", size = 5521 },
 ]
 
 [[package]]

@@ -7,7 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "polars>=1.9",
     "polugins>=0.5.1",
-    "polugins-type-gen>=0.6.0rc1",
+    "polugins-type-gen>=0.6.0",
 ]
 
 [project.optional-dependencies]
