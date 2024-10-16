@@ -1,8 +1,6 @@
 import gurobipy as gp
 import polars as pl
 
-pytest_plugins = ["utils"]
-
 
 def test_gurobi_model(model: gp.Model):
     df = pl.DataFrame(
