@@ -6,8 +6,6 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "polars>=1.9",
-    "polugins>=0.5.1",
-    "polugins-type-gen>=0.6.0",
 ]
 
 [project.optional-dependencies]
@@ -34,8 +32,3 @@ line-length = 100
 
 [tool.ruff.lint.per-file-ignores]
 "typings/*" = ["F"]
-
-[tool.polugins.dataframe]
-# this is used to have typing with the gp accessor
-# https://github.com/StefanBRas/polugins/tree/create-pull-request/patch
-"gp" = "polors.gurobi:GurobiPolars"

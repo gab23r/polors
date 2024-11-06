@@ -130,8 +130,6 @@ version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "polars" },
-    { name = "polugins" },
-    { name = "polugins-type-gen" },
 ]
 
 [package.optional-dependencies]
@@ -152,8 +150,6 @@ requires-dist = [
     { name = "gurobipy", marker = "extra == 'gurobi'", specifier = ">=11.0.3" },
     { name = "numpy", marker = "extra == 'gurobi'", specifier = ">=2.1.2" },
     { name = "polars", specifier = ">=1.9" },
-    { name = "polugins", specifier = ">=0.5.1" },
-    { name = "polugins-type-gen", specifier = ">=0.6.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -161,32 +157,6 @@ dev = [
     { name = "mypy", specifier = ">=1.11.2" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "ruff", specifier = ">=0.6.9" },
-]
-
-[[package]]
-name = "polugins"
-version = "0.5.1"
-source = { registry = "https://pypi.python.org/simple" }
-dependencies = [
-    { name = "polars" },
-    { name = "tomli" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a5/40/9f50ee7945081d0c52fdbc201241a0808f34d169457d122115bd65c22517/polugins-0.5.1.tar.gz", hash = "sha256:7ac7af8990d609cdddf69d57f71da7c2b00a0680b21ff1a2771429d48f118619", size = 3069 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/65/7f4a51fb1c5b87faab74815f639f5fc6184b1d0c6496ebcabcac097126b1/polugins-0.5.1-py3-none-any.whl", hash = "sha256:b0999d47df1e2e9084712fcb8e144372b58e39ae34cf723ce0e55b6f5842796b", size = 4534 },
-]
-
-[[package]]
-name = "polugins-type-gen"
-version = "0.6.0"
-source = { registry = "https://pypi.python.org/simple" }
-dependencies = [
-    { name = "polugins" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/bb/c42f18d9b7eee47f7556090a2837ea915ce9733d2aab142679bce6336de9/polugins_type_gen-0.6.0.tar.gz", hash = "sha256:b5d6ee875ca30fb3b8227ab8267b19fe08c1e3160ddc823e89076405badf3e15", size = 3982 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/55/8e5dda056ed8228b0a763a076e1edaed7dc93e9e1d5467f490cd8b5b8cc4/polugins_type_gen-0.6.0-py3-none-any.whl", hash = "sha256:e62d9d5e4ade15809690abb67f2c761d3d425bdd6b357297e07ecb46c9ca8d41", size = 5521 },
 ]
 
 [[package]]
@@ -227,15 +197,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/bb/a4/c84bc13d0b573cf7bb7d17b16d6d29f84267c92d79b2f478d4ce322e8e72/ruff-0.6.9-py3-none-win32.whl", hash = "sha256:eb61ec9bdb2506cffd492e05ac40e5bc6284873aceb605503d8494180d6fc84d", size = 8522088 },
     { url = "https://files.pythonhosted.org/packages/74/be/fc352bd8ca40daae8740b54c1c3e905a7efe470d420a268cd62150248c91/ruff-0.6.9-py3-none-win_amd64.whl", hash = "sha256:785d31851c1ae91f45b3d8fe23b8ae4b5170089021fbb42402d811135f0b7117", size = 9359275 },
     { url = "https://files.pythonhosted.org/packages/3e/14/fd026bc74ded05e2351681545a5f626e78ef831f8edce064d61acd2e6ec7/ruff-0.6.9-py3-none-win_arm64.whl", hash = "sha256:a9641e31476d601f83cd602608739a0840e348bda93fec9f1ee816f8b6798b93", size = 8679879 },
-]
-
-[[package]]
-name = "tomli"
-version = "2.0.2"
-source = { registry = "https://pypi.python.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/35/b9/de2a5c0144d7d75a57ff355c0c24054f965b2dc3036456ae03a51ea6264b/tomli-2.0.2.tar.gz", hash = "sha256:d46d457a85337051c36524bc5349dd91b1877838e2979ac5ced3e710ed8a60ed", size = 16096 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/db/ce8eda256fa131af12e0a76d481711abe4681b6923c27efb9a255c9e4594/tomli-2.0.2-py3-none-any.whl", hash = "sha256:2ebe24485c53d303f690b0ec092806a085f07af5a5aa1464f3931eec36caaa38", size = 13237 },
 ]
 
 [[package]]
