@@ -31,7 +31,7 @@ def quicksum(expr: pl.Expr | str) -> pl.Expr:
 def any(expr: pl.Expr | str) -> pl.Expr:
     if isinstance(expr, str):
         expr = pl.col(expr)
-    return expr.map_elements(gp.or_, return_dtype=pl.Object)
+    return expr.map_elements(lambda d: gp.or_(d.to_list()), return_dtype=pl.Object)
 
 
 def read_value(expr: pl.Expr | str):
@@ -153,6 +153,8 @@ def add_constrs(
     Constraints are build as if the comparison operator were applied
     element-wise over between data[lhs] and data[rhs].
     """
+    if df.height == 0:
+        return df
     if isinstance(lhs, str):
         lhs_, sense_, rhs_ = _utils.evaluate_comp_expr(df, lhs)
         constrs = _utils.add_constrs_from_dataframe_args(df, model, lhs_, sense_, rhs_, name)
