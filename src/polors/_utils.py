@@ -67,10 +67,10 @@ def evaluate_expr(df: pl.DataFrame, expr: str) -> pl.Series:
             for node in ast.walk(tree)
             if isinstance(node, ast.Name) and node.id in df.columns
         }
-        if not vars:
-            return df.with_columns(__polors_tmp__=eval(expr))["__polors_tmp__"]
-        else:
+        if vars.intersection(df.select(pl.col(pl.Object)).columns):
             return pl.Series(
                 [eval(expr, None, r) for r in df.select(vars).rows(named=True)],
                 dtype=pl.Object,
             )
+        else:
+            return df.with_columns(__polors_tmp__=eval(expr))["__polors_tmp__"]
