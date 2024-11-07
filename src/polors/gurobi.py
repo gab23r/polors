@@ -1,3 +1,4 @@
+import re
 from typing import Literal, overload
 
 import gurobipy as gp
@@ -6,8 +7,14 @@ import polars as pl
 from polors import _utils
 
 
-def apply_eval(self: pl.DataFrame, expr: str, name: str = "") -> pl.DataFrame:
-    return self.with_columns(_utils.evaluate_expr(self, expr).alias(name))
+def apply_eval(self: pl.DataFrame, expr: str) -> pl.DataFrame:
+    *alias, expr = re.split("=", expr)
+
+    series = _utils.evaluate_expr(self, expr.strip())
+    if alias:
+        series = series.alias(alias[0].strip())
+
+    return self.with_columns(series)
 
 
 def first(expr: pl.Expr | str) -> pl.Expr:

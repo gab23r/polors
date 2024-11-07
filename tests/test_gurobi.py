@@ -25,7 +25,7 @@ def test_gurobi_model(model: gp.Model):
             indices=["i", "j"],
             vtype=gp.GRB.CONTINUOUS,
         )
-        .pipe(pg.apply_eval, "2 * x - c", name="y")
+        .pipe(pg.apply_eval, "y = 2 * x - c")
         .group_by("i")
         .agg(pg.quicksum("y"), pl.col("c").min())
         .pipe(pg.add_constrs, model, "y <= c", name="constr")
