@@ -17,11 +17,9 @@ def add_constrs_from_dataframe_args(
     first_lhs = rows[0][0]
     first_rhs = rows[0][1]
 
-    if isinstance(first_rhs, gp.GenExprOr):
+    if isinstance(first_rhs, gp.GenExprOr | gp.GenExprAbs):
         _add_constr = model.addConstr
-    elif isinstance(first_rhs, gp.GenExprAbs):
-        _add_constr = model.addConstr
-    elif isinstance(first_lhs, gp.QuadExpr) or isinstance(first_rhs, gp.QuadExpr):
+    elif isinstance(first_lhs, gp.QuadExpr | gp.QuadExpr):
         _add_constr = model.addQConstr
     else:
         _add_constr = model.addLConstr
@@ -33,7 +31,8 @@ def add_constrs_from_dataframe_args(
     elif sense in ("==", "="):
         operator = "__eq__"
     else:
-        raise Exception(f"sense should be one of ('<=', '>=', '=='), got {sense}")
+        msg = f"sense should be one of ('<=', '>=', '=='), got {sense}"
+        raise Exception(msg)
 
     name = name or ""
     constrs = [
