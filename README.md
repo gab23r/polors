@@ -1,7 +1,6 @@
 # xplor: A Modern DataFrame-Centric Optimization Framework
 
 [![PyPI version](https://badge.fury.io/py/xplor.svg)](https://badge.fury.io/py/xplor)
-[![Python Support](https://img.shields.io/pypi/pyversions/xplor.svg)](https://pypi.org/project/xplor/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 xplor provides a unified framework for building Operation Research models using [polars](https://pola.rs/) DataFrames. By leveraging polars' performance and ergonomic API, xplor makes mathematical optimization more intuitive and maintainable.
