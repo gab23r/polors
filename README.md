@@ -46,7 +46,7 @@ df = pl.DataFrame({
     "obj": [2.5, 2.7, 1.2, 1.7, 3.9],
 })
 
-# Add variables and constraints using the polars API
+# Add variables and constraints
 df = (
     df
     .pipe(pg.add_vars, model, name="x", ub="u", obj="obj", indices=["i", "j"])
