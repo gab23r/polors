@@ -121,7 +121,7 @@ def add_constrs(
     df: pl.DataFrame,
     model: gp.Model,
     lhs: float | pl.Expr,
-    sense: Literal["<"] | Literal["="] | Literal[">"],
+    sense: Literal["<="] | Literal["=="] | Literal[">="],
     rhs: float | pl.Expr,
     name: str | None = ...,
 ) -> pl.DataFrame: ...
@@ -142,7 +142,7 @@ def add_constrs(
     df: pl.DataFrame,
     model: gp.Model,
     lhs: str | float | pl.Expr,
-    sense: Literal["<"] | Literal["="] | Literal[">"] | None = None,
+    sense: Literal["<="] | Literal["=="] | Literal[">="] | None = None,
     rhs: float | pl.Expr | None = None,
     name: str | None = None,
 ) -> pl.DataFrame:
@@ -170,7 +170,7 @@ def add_constrs(
         assert sense is not None
         constrs = _utils.add_constrs_from_dataframe_args(df, model, lhs, sense, rhs, name)
 
-    model.update()
+    # model.update()
     if name is None:
         return df
     else:

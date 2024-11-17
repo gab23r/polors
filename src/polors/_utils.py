@@ -4,8 +4,6 @@ import re
 import gurobipy as gp
 import polars as pl
 
-CONSTRAINT_SENSES = frozenset((gp.GRB.LESS_EQUAL, gp.GRB.EQUAL, gp.GRB.GREATER_EQUAL))
-
 
 def add_constrs_from_dataframe_args(
     df: pl.DataFrame,
@@ -21,19 +19,21 @@ def add_constrs_from_dataframe_args(
 
     if isinstance(first_rhs, gp.GenExprOr):
         _add_constr = model.addConstr
+    elif isinstance(first_rhs, gp.GenExprAbs):
+        _add_constr = model.addConstr
     elif isinstance(first_lhs, gp.QuadExpr) or isinstance(first_rhs, gp.QuadExpr):
         _add_constr = model.addQConstr
     else:
         _add_constr = model.addLConstr
 
-    if sense == gp.GRB.EQUAL:
-        operator = "__eq__"
-    elif sense == gp.GRB.LESS_EQUAL:
+    if sense in ("<=", "<"):
         operator = "__le__"
-    elif sense == gp.GRB.GREATER_EQUAL:
+    elif sense in (">=", ">"):
         operator = "__ge__"
+    elif sense in ("==", "="):
+        operator = "__eq__"
     else:
-        raise Exception(f"operator should be one of {CONSTRAINT_SENSES}, got {sense}")
+        raise Exception(f"sense should be one of ('<=', '>=', '=='), got {sense}")
 
     name = name or ""
     constrs = [
