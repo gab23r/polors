@@ -41,6 +41,12 @@ def any(expr: pl.Expr | str) -> pl.Expr:
     return expr.map_elements(lambda d: gp.or_(d.to_list()), return_dtype=pl.Object)
 
 
+def abs(expr: pl.Expr | str) -> pl.Expr:
+    if isinstance(expr, str):
+        expr = pl.col(expr)
+    return expr.map_elements(lambda d: gp.abs_(d.to_list()), return_dtype=pl.Object)
+
+
 def read_value(expr: pl.Expr | str):
     if isinstance(expr, str):
         expr = pl.col(expr)
