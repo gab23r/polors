@@ -1,9 +1,10 @@
 import gurobipy as gp
 import polars as pl
+
 import xplor.gurobi as pg
 
 
-def test_gurobi_model(model: gp.Model):
+def test_gurobi_model(model: gp.Model) -> None:
     df = pl.DataFrame(
         {
             "i": [0, 0, 1, 2, 2],

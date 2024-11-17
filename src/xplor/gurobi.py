@@ -2,6 +2,7 @@ import re
 
 import gurobipy as gp
 import polars as pl
+
 from xplor import _utils
 
 

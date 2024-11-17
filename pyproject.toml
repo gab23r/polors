@@ -64,4 +64,9 @@ select = [
 ignore = [
   "D100", # Missing docstring in public module
   "TRY002", # Create your own exception
+  "D203", # one-blank-line-before-class
+  "D213", # multi-line-summary-second-line
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D100", "D102", "D103", "B018", "FBT001"]
