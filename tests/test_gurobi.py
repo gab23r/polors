@@ -1,7 +1,6 @@
 import gurobipy as gp
 import polars as pl
-
-import polors.gurobi as pg
+import xplor.gurobi as pg
 
 
 def test_gurobi_model(model: gp.Model):

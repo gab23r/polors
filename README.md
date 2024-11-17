@@ -1,4 +1,4 @@
-## polORs - Operation Research with polars
+## xplor - Operation Research with polars
 
 
 This package is heavily inspired by [gurobipy-pandas](https://github.com/Gurobi/gurobipy-pandas) but uses polars as dataframe backend.
@@ -7,7 +7,7 @@ This package is heavily inspired by [gurobipy-pandas](https://github.com/Gurobi/
 ### Basic example
 ```python
 
-import polors.gurobi as pg
+import xplor.gurobi as pg
 import gurobipy as gp
 
 model = gp.Model()

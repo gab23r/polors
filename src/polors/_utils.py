@@ -73,4 +73,4 @@ def evaluate_expr(df: pl.DataFrame, expr: str) -> pl.Series:
                 dtype=pl.Object,
             )
         else:
-            return df.with_columns(__polors_tmp__=eval(expr))["__polors_tmp__"]
+            return df.with_columns(__xplor_tmp__=eval(expr))["__xplor_tmp__"]

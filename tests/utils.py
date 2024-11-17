@@ -1,6 +1,6 @@
 import gurobipy as gp
-import polors  # noqa: F401
 import pytest
+import xplor  # noqa: F401
 
 
 @pytest.fixture

@@ -3,8 +3,7 @@ from typing import Literal, overload
 
 import gurobipy as gp
 import polars as pl
-
-from polors import _utils
+from xplor import _utils
 
 
 def apply_eval(self: pl.DataFrame, expr: str) -> pl.DataFrame:
