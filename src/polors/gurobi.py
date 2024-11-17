@@ -44,7 +44,14 @@ def any(expr: pl.Expr | str) -> pl.Expr:
 def read_value(expr: pl.Expr | str):
     if isinstance(expr, str):
         expr = pl.col(expr)
-    return expr.map_elements(lambda d: d.X, return_dtype=pl.Float64)
+    return expr.map_batches(
+        lambda s:
+        # in case of a variable
+        pl.Series([e.x for e in s])
+        if s.len() and hasattr(s[0], "X")
+        # in case of a linExpr
+        else pl.Series([e.getValue() for e in s])
+    )
 
 
 def add_vars(
