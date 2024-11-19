@@ -46,7 +46,7 @@ Here's a simple example showing how to build and solve an optimization model usi
 ...     "obj": [2.5, 2.7, 1.2, 1.7, 3.9],
 ... })
 
-# Add variables and constraints
+# Add variables
 >>> df = (
 ...     df
 ...     .pipe(xmodel.add_vars, name="x", ub="u", obj="obj", indices=["i", "j"])
