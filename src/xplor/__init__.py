@@ -1,1 +1,1 @@
-"""Operation research zith polars."""
+"""Operation research with polars."""

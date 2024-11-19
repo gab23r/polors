@@ -29,42 +29,78 @@ pip install gurobipy
 Here's a simple example showing how to build and solve an optimization model using xplor:
 
 ```python
-import xplor.gurobi as pg
-import polars as pl
-import gurobipy as gp
+>>> import xplor.gurobi as xpg
+>>> import polars as pl
+>>> import gurobipy as gp
 
-# Create a model
-model = gp.Model()
+# Wrap your model with XplorGurobi
+>>> model = gp.Model()
+>>> xmodel = xpg.XplorGurobi(model, deterministic = True, auto_update= True)
 
 # Create sample data
-df = pl.DataFrame({
-    "i": [0, 0, 1, 2, 2],
-    "j": [1, 2, 0, 0, 1],
-    "u": [0.3, 1.2, 0.7, 0.9, 1.2],
-    "c": [1.3, 1.7, 1.4, 1.1, 0.9],
-    "obj": [2.5, 2.7, 1.2, 1.7, 3.9],
-})
+>>> df = pl.DataFrame({
+...     "i": [0, 0, 1, 2, 2],
+...     "j": [1, 2, 0, 0, 1],
+...     "u": [0.3, 1.2, 0.7, 0.9, 1.2],
+...     "c": [1.3, 1.7, 1.4, 1.1, 0.9],
+...     "obj": [2.5, 2.7, 1.2, 1.7, 3.9],
+... })
 
 # Add variables and constraints
-df = (
-    df
-    .pipe(pg.add_vars, model, name="x", ub="u", obj="obj", indices=["i", "j"])
-    .pipe(pg.apply_eval, "y = 2 * x - c")
-)
+>>> df = (
+...     df
+...     .pipe(xmodel.add_vars, name="x", ub="u", obj="obj", indices=["i", "j"])
+...     .pipe(xpg.apply_eval, "y = 2 * x - c")
+... )
+>>> df
+shape: (5, 7)
+┌─────┬─────┬─────┬─────┬─────┬─────────────────────┬───────────────────┐
+│ i   ┆ j   ┆ u   ┆ c   ┆ obj ┆ x                   ┆ y                 │
+│ --- ┆ --- ┆ --- ┆ --- ┆ --- ┆ ---                 ┆ ---               │
+│ i64 ┆ i64 ┆ f64 ┆ f64 ┆ f64 ┆ object              ┆ object            │
+╞═════╪═════╪═════╪═════╪═════╪═════════════════════╪═══════════════════╡
+│ 0   ┆ 1   ┆ 0.3 ┆ 1.3 ┆ 2.5 ┆ <gurobi.Var x[0,1]> ┆ -1.3 + 2.0 x[0,1] │
+│ 0   ┆ 2   ┆ 1.2 ┆ 1.7 ┆ 2.7 ┆ <gurobi.Var x[0,2]> ┆ -1.7 + 2.0 x[0,2] │
+│ 1   ┆ 0   ┆ 0.7 ┆ 1.4 ┆ 1.2 ┆ <gurobi.Var x[1,0]> ┆ -1.4 + 2.0 x[1,0] │
+│ 2   ┆ 0   ┆ 0.9 ┆ 1.1 ┆ 1.7 ┆ <gurobi.Var x[2,0]> ┆ -1.1 + 2.0 x[2,0] │
+│ 2   ┆ 1   ┆ 1.2 ┆ 0.9 ┆ 3.9 ┆ <gurobi.Var x[2,1]> ┆ -0.9 + 2.0 x[2,1] │
+└─────┴─────┴─────┴─────┴─────┴─────────────────────┴───────────────────┘
 
 # Add constraints using grouped operations
-(
-    df
-    .group_by("i")
-    .agg(pg.quicksum("y"), pl.col("c").min())
-    .pipe(pg.add_constrs, model, "y <= c", name="constr")
-)
+>>> (
+...     df
+...     .group_by("i")
+...     .agg(xpg.quicksum("y"), pl.col("c").min())
+...     .pipe(xmodel.add_constrs, "y <= c", name="sum_on_j", indices=["i"])
+... )
+shape: (3, 4)
+┌─────┬────────────────────────────────┬─────┬─────────────────────────────┐
+│ i   ┆ y                              ┆ c   ┆ sum_on_j                    │
+│ --- ┆ ---                            ┆ --- ┆ ---                         │
+│ i64 ┆ object                         ┆ f64 ┆ object                      │
+╞═════╪════════════════════════════════╪═════╪═════════════════════════════╡
+│ 1   ┆ -1.4 + 2.0 x[1,0]              ┆ 1.4 ┆ <gurobi.Constr sum_on_j[1]> │
+│ 0   ┆ -3.0 + 2.0 x[0,1] + 2.0 x[0,2] ┆ 1.3 ┆ <gurobi.Constr sum_on_j[0]> │
+│ 2   ┆ -2.0 + 2.0 x[2,0] + 2.0 x[2,1] ┆ 0.9 ┆ <gurobi.Constr sum_on_j[2]> │
+└─────┴────────────────────────────────┴─────┴─────────────────────────────┘
 
 # Solve the model
-model.optimize()
+>>> model.optimize()
 
 # Extract solution
-solution = df.with_columns(pg.read_value("x"))
+>>> df.with_columns(xpg.read_value("x"))
+shape: (5, 7)
+┌─────┬─────┬─────┬─────┬─────┬─────┬───────────────────┐
+│ i   ┆ j   ┆ u   ┆ c   ┆ obj ┆ x   ┆ y                 │
+│ --- ┆ --- ┆ --- ┆ --- ┆ --- ┆ --- ┆ ---               │
+│ i64 ┆ i64 ┆ f64 ┆ f64 ┆ f64 ┆ f64 ┆ object            │
+╞═════╪═════╪═════╪═════╪═════╪═════╪═══════════════════╡
+│ 0   ┆ 1   ┆ 0.3 ┆ 1.3 ┆ 2.5 ┆ 0.0 ┆ -1.3 + 2.0 x[0,1] │
+│ 0   ┆ 2   ┆ 1.2 ┆ 1.7 ┆ 2.7 ┆ 0.0 ┆ -1.7 + 2.0 x[0,2] │
+│ 1   ┆ 0   ┆ 0.7 ┆ 1.4 ┆ 1.2 ┆ 0.0 ┆ -1.4 + 2.0 x[1,0] │
+│ 2   ┆ 0   ┆ 0.9 ┆ 1.1 ┆ 1.7 ┆ 0.0 ┆ -1.1 + 2.0 x[2,0] │
+│ 2   ┆ 1   ┆ 1.2 ┆ 0.9 ┆ 3.9 ┆ 0.0 ┆ -0.9 + 2.0 x[2,1] │
+└─────┴─────┴─────┴─────┴─────┴─────┴───────────────────┘
 ```
 
 ## Current Status
