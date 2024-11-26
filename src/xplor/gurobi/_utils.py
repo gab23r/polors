@@ -34,12 +34,12 @@ def add_constrs_from_dataframe_args(
     name: list[str] | str,
 ) -> list[gp.QConstr | gp.Constr]:
     rows = df.select(lhs=lhs, rhs=rhs).rows()
-    first_lhs = rows[0][0]
-    first_rhs = rows[0][1]
 
-    if isinstance(first_rhs, gp.GenExprOr | gp.GenExprAbs):
+    lhs_constr_type = str(type(rows[0][0]))
+    rhs_constr_type = str(type(rows[0][1]))
+    if "GenExpr" in lhs_constr_type:
         _add_constr = model.addConstr
-    elif isinstance(first_lhs, gp.QuadExpr | gp.QuadExpr):
+    elif "QuadExpr" in lhs_constr_type or "QuadExpr" in rhs_constr_type:
         _add_constr = model.addQConstr
     else:
         _add_constr = model.addLConstr

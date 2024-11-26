@@ -1,24 +1,28 @@
-from typing import Self
+from typing import TYPE_CHECKING
 
-import gurobipy as gp
 import polars as pl
 
-import xplor.gurobi._utils as gurobi_utils
-from xplor import _utils
+import xplor._dependencies as _dependencies
+
+if TYPE_CHECKING:
+    import gurobipy as gp
+    from ortools.math_opt.python import mathopt
+
+    from xplor.gurobi.model import XplorGurobi
 
 
-class XplorGurobi:
-    """Xplor base class to wrap your Gurobi model."""
+class Xplor[M: "gp.Model | mathopt.Model"]:
+    """Xplor base class to wrap your OR model."""
 
-    def __init__(
-        self: Self, model: gp.Model, *, deterministic: bool = False, auto_update: bool = False
-    ) -> None:
-        """Initialize an XplorGurobi instance.
+    _backend: "XplorGurobi"
+
+    def __init__(self, model: M, *, deterministic: bool = False, auto_update: bool = False) -> None:
+        """Initialize an Xplor instance.
 
         Parameters
         ----------
-        model : gp.Model
-            The Gurobi optimization model to wrap.
+        model : gp.Model or math_opt.Model
+            The Model to wrap
         deterministic : bool, default=False
             Whether to ensure deterministic behavior when creating variables.
         auto_update : bool, default=False
@@ -32,14 +36,23 @@ class XplorGurobi:
 
         """
         self.model = model
+        self._set_backend()
+
         self.deterministic = deterministic
         self.auto_update = auto_update
         self.constrs: dict[str, pl.DataFrame] = {}
         self.vars: dict[str, pl.DataFrame] = {}
 
-    @gurobi_utils.update_model
+    def _set_backend(self) -> None:
+        if (gp_model := _dependencies.get_gurobipy_model_type()) is not None and isinstance(
+            self.model, gp_model
+        ):
+            from xplor.gurobi.model import XplorGurobi
+
+            self._backend = XplorGurobi(self.model)
+
     def add_constrs(
-        self: Self,
+        self,
         df: pl.DataFrame,
         expr: str,
         name: str | None = None,
@@ -79,7 +92,7 @@ class XplorGurobi:
         Notes
         -----
         - Expression can use any column name from the DataFrame
-        - Supports arithmetic operations (+, -, *, /) and Gurobi functions
+        - Supports arithmetic operations (+, -, *, /)
         - Empty DataFrames are returned unchanged
         - The model is not automatically updated after adding constraints
 
@@ -88,47 +101,25 @@ class XplorGurobi:
         add_vars : Function to add variables to the model
 
         """
-        if df.height == 0:
-            return df
-
-        name = name or expr
-
-        if indices is None:
-            indices = ["__default_index__"]
-            df = df.with_row_index(name=indices[0])
-
-        df_ = df.sort(indices) if self.deterministic else df
-
-        lhs_, sense_, rhs_ = _utils.evaluate_comp_expr(df_, expr)
-        name_ = _utils.format_indices(df_, name, indices) if indices else name
-        constrs = gurobi_utils.add_constrs_from_dataframe_args(
-            df_, self.model, lhs_, sense_, rhs_, name_
+        return self._backend.add_constrs(
+            df=df,
+            expr=expr,
+            name=name,
+            indices=indices,
         )
 
-        # we need a join because of the sort
-        # we take the advantage of checking that indices are unique on df
-        # this is almost free via `validate`
-        self.constrs[name] = df.join(
-            df_.select(*indices, pl.Series(name, constrs, dtype=pl.Object)),
-            on=indices,
-            validate="1:1",
-        )
-
-        return self.constrs[name]
-
-    @gurobi_utils.update_model
     def add_vars(
-        self: Self,
+        self,
         df: pl.DataFrame,
         name: str,
-        vtype: str | None = None,
+        vtype: str | None,
         *,
         lb: float | str | pl.Expr = 0.0,
         ub: float | str | pl.Expr | None = None,
         obj: float | str | pl.Expr = 0.0,
         indices: list[str] | None = None,
     ) -> pl.DataFrame:
-        """Add a variable to the gurobi model for each row in the dataframe.
+        """Add a variable for each row in the dataframe.
 
         Parameters
         ----------
@@ -154,32 +145,12 @@ class XplorGurobi:
             A new DataFrame with new Vars appended as a column
 
         """
-        if ub is None:
-            ub = gp.GRB.INFINITY
-        if vtype is None:
-            vtype = gp.GRB.CONTINUOUS
-        if indices is None:
-            indices = ["__default_index__"]
-            df = df.with_row_index(name=indices[0])
-
-        df_ = df.select(*indices, lb=lb, ub=ub, obj=obj)
-        if self.deterministic:
-            df_ = df_.sort(indices)
-
-        mvar = self.model.addMVar(
-            df.height,
+        return self._backend.add_vars(
+            df=df,
+            name=name,
             vtype=vtype,
-            lb=df_["lb"].to_numpy(),
-            ub=df_["ub"].to_numpy(),
-            obj=df_["obj"].to_numpy(),
-            name=_utils.format_indices(df_, name, indices),
-        ).tolist()
-
-        # we need a join because of the sort
-        # we take the advantage of checking that indices are unique on df
-        # this is almost free via `validate`
-        self.vars[name] = df.join(
-            df_.select(*indices, pl.Series(name, mvar, dtype=pl.Object)), on=indices, validate="1:1"
+            lb=lb,
+            ub=ub,
+            obj=obj,
+            indices=indices,
         )
-
-        return self.vars[name]

@@ -7,9 +7,9 @@ authors = [
     { name = "Gabriel Robin" }
 ]
 license = { text = "MIT" }
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
-    "polars>=1.9",
+    "polars>=1.15",
 ]
 
 [project.optional-dependencies]
@@ -17,6 +17,10 @@ gurobi = [
     "gurobipy>=11.0.3",
     "numpy>=2.1.2",
 ]
+ortools = [
+    "ortools>=9.11.4210",
+]
+
 
 [build-system]
 requires = ["hatchling"]
@@ -29,11 +33,14 @@ packages = ["src/xplor"]
 dev-dependencies = [
     "mypy>=1.11.2",
     "pytest>=8.3.3",
-    "ruff>=0.6.9",
+    "ruff>=0.8",
 ]
+
+[[tool.uv.index]]
+url = "https://pypi.python.org/simple"
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312"
 fix = true
 
 [tool.ruff.lint]
@@ -57,7 +64,7 @@ select = [
   "PYI", # flake8-pyi
   "RUF", # ruff-specific rules
   "SIM", # flake8-simplify
-  "TCH", # flake8-type-checking
+  "TC", # flake8-type-checking
   "TD", # flake8-todos
   "TID", # flake8-tidy-imports
   "TRY", # tryceratops
