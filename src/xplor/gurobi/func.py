@@ -143,12 +143,12 @@ def abs(expr: pl.Expr | str) -> pl.Expr:
 
     Examples
     --------
-    >>> df.group_by('group').agg(abs('value'))
+    >>> df.with_columns(x_abs = abs('x'))
 
     """
     if isinstance(expr, str):
         expr = pl.col(expr)
-    return expr.map_elements(lambda d: gp.abs_(d.to_list()), return_dtype=pl.Object)
+    return expr.map_elements(lambda d: gp.abs_(d), return_dtype=pl.Object)
 
 
 def read_value(expr: pl.Expr | str) -> pl.Expr:
